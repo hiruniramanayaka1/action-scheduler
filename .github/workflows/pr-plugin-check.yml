@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   plugin-check:
     # Referenced by name from trunk's required status checks: rename both together.
@@ -32,7 +36,7 @@ jobs:
       # .wp-env.json, but wp-env merges the override file on top.
       - name: Pin Plugin Check
         run: |
-          printf '{ "plugins": [ "https://downloads.wordpress.org/plugin/plugin-check.%s.zip" ] }\n' "$PLUGIN_CHECK_VERSION" > .wp-env.override.json
+          printf '{ "plugins": [ "https://downloads.wordpress.org/plugin/plugin-check.%s.zip" ] }\\n' "$PLUGIN_CHECK_VERSION" > .wp-env.override.json
 
       # Existing findings, ignored because they are part of the design or the public API. Each code
       # also suppresses new occurrences, so review before adding to this list. Built here because
