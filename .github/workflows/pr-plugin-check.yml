@@ -1,3 +1,8 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 1 optimization:
+# - [MEDIUM] Add concurrency group to "pr-plugin-check.yml"
+# Estimated savings: ~2 min/run
+#
 name: Plugin Check on PR
 on:
   workflow_dispatch:
@@ -5,6 +10,10 @@ on:
     branches:
       - trunk
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 
